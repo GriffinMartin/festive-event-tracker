@@ -104,7 +104,7 @@ export default {
         description: this.description,
         date: new Date()
       };
-      this.$store.dispatch("createEvent", eventData);
+      this.$store.dispatch("events/createEvent", eventData);
       this.$router.push("/");
     }
   }

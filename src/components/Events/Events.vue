@@ -14,17 +14,12 @@
 </template>
 
 <script>
-// import Event from "./Event";
+import { mapState } from "vuex";
 
 export default {
-  // components: {
-  //   Event
-  // },
-  computed: {
-    events() {
-      return this.$store.getters.loadedEvents;
-    }
-  },
+  computed: mapState({
+    events: state => state.events.loadedEvents
+  }),
   data: () => ({})
 };
 </script>
