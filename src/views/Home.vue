@@ -1,13 +1,13 @@
 <template>
-  <Shows />
+  <Events />
 </template>
 
 <script>
-import Shows from "../components/Shows";
+import Events from "../components/Events/Events";
 
 export default {
   components: {
-    Shows
+    Events
   }
 };
 </script>

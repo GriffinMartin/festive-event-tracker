@@ -1,35 +1,54 @@
 <template>
   <v-app>
-    <v-toolbar app>
-      <v-toolbar-title class="headline text-uppercase">
-        <span>Festive</span>
-        <span class="font-weight-light"> EVENT TRACKER</span>
+    <!--
+      <v-navigation-drawer temporary v-model="sideNav">
+        <v-list>
+          <v-list-tile
+            v-for="item in menuItems"
+            :key="item.title"
+            :to="item.link">
+            <v-list-tile-action>
+              <v-icon>{{ item.icon }}</v-icon>
+            </v-list-tile-action>
+            <v-list-tile-content>{{ item.title }}</v-list-tile-content>
+          </v-list-tile>
+        </v-list>
+      </v-navigation-drawer>
+    -->
+    <v-toolbar dark class="primary">
+      <v-toolbar-side-icon
+        @click.stop="sideNav = !sideNav;"
+        class="hidden-sm-and-up "
+      ></v-toolbar-side-icon>
+      <v-toolbar-title>
+        <router-link to="/" tag="span" style="cursor: pointer"
+          >Event Tracker</router-link
+        >
       </v-toolbar-title>
       <v-spacer></v-spacer>
-      <v-btn
-        flat
-        href="https://github.com/vuetifyjs/vuetify/releases/latest"
-        target="_blank"
-      >
-        <!-- <span class="mr-2">Latest Release</span> -->
-      </v-btn>
+      <v-toolbar-items class="hidden-xs-only">
+        <v-btn flat v-for="item in menuItems" :key="item.title" :to="item.link">
+          <v-icon left dark>{{ item.icon }}</v-icon>
+          {{ item.title }}
+        </v-btn>
+      </v-toolbar-items>
     </v-toolbar>
-
-    <v-content> <Shows /> </v-content>
+    <main><router-view></router-view></main>
   </v-app>
 </template>
 
 <script>
-import Shows from "./components/Shows";
-
 export default {
-  name: "App",
-  components: {
-    Shows
-  },
   data() {
     return {
-      //
+      sideNav: false,
+      menuItems: [
+        // { icon: "supervisor_account", title: "View Events", link: "/events" },
+        { icon: "room", title: "Create Event", link: "/event/new" },
+        { icon: "person", title: "Profile", link: "/profile" },
+        { icon: "face", title: "Sign up", link: "/signup" },
+        { icon: "lock_open", title: "Sign in", link: "/signin" }
+      ]
     };
   }
 };
