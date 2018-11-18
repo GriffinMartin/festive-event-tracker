@@ -9,13 +9,13 @@
           <v-img :src="event.imageUrl" height="400px"></v-img>
           <v-card-text>
             <div class="info--text">
-              {{ event.date }} - {{ event.location }}
+              {{ event.date | date }} - {{ event.location }}
             </div>
             <div>{{ event.description }}</div>
           </v-card-text>
           <v-card-actions>
             <v-spacer></v-spacer>
-            <v-btn class="primary">Register</v-btn>
+            <v-btn class="primary">Purchase Tickets</v-btn>
           </v-card-actions>
         </v-card>
       </v-flex>

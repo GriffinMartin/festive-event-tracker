@@ -6,7 +6,7 @@ const state = {
         "https://image-ticketfly.imgix.net/00/03/05/53/91-og.png?w=650&h=919",
       id: "1324twgfd",
       title: "Black Box 2 Year",
-      date: "2018-7-18",
+      date: new Date(),
       location: "Denver, CO",
       description: "This is a description"
     },
@@ -15,7 +15,7 @@ const state = {
         "https://image-ticketfly.imgix.net/00/03/05/53/91-og.png?w=650&h=919",
       id: "234rsdfd",
       title: "Tipper NYE",
-      date: "2018-7-19",
+      date: new Date(),
       location: "Denver, CO",
       description: "This is another description"
     }

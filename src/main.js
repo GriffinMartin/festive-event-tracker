@@ -1,12 +1,17 @@
 import Vue from "vue";
-import "./plugins/vuetify";
-import App from "./App.vue";
+import VueFire from "vuefire";
+
 import router from "./router";
 import store from "./store";
-import "roboto-fontface/css/roboto/roboto-fontface.css";
-import "material-design-icons-iconfont/dist/material-design-icons.css";
+import "./plugins/vuetify";
+import "./firebase";
+
+import App from "./App";
+import DateFilter from "./filters/date";
 
 Vue.config.productionTip = false;
+Vue.use(VueFire);
+Vue.filter("date", DateFilter);
 
 new Vue({
   router,
