@@ -2,7 +2,8 @@ import Vue from "vue";
 import Router from "vue-router";
 import CreateEvent from "@/components/Events/CreateEvent";
 import Event from "@/components/Events/Event";
-import Signup from "@/components/User/Singup";
+import Signin from "@/components/User/Signin";
+import Signup from "@/components/User/Signup";
 import Home from "@/views/Home.vue";
 
 Vue.use(Router);
@@ -34,11 +35,11 @@ export default new Router({
       path: "/signup",
       name: "Signup",
       component: Signup
+    },
+    {
+      path: "/signin",
+      name: "Signin",
+      component: Signin
     }
-    // {
-    //   path: '/signin',
-    //   name: 'Signin',
-    //   component: Signin
-    // }
   ]
 });

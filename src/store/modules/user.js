@@ -6,6 +6,21 @@ const state = {
 };
 // actions
 const actions = {
+  signUserIn({ commit }, payload) {
+    firebase
+      .auth()
+      .signInWithEmailAndPassword(payload.email, payload.password)
+      .then(response => {
+        const newUser = {
+          id: response.user.uid,
+          trackedEvents: []
+        };
+        commit("setUser", newUser);
+      })
+      .catch(error => {
+        console.log(error);
+      });
+  },
   signUserUp({ commit }, payload) {
     firebase
       .auth()
