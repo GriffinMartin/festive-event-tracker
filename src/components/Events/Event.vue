@@ -1,5 +1,5 @@
 <template>
-  <v-container>
+  <v-container v-if="!loading">
     <v-layout row wrap>
       <v-flex xs12>
         <v-card>
@@ -29,6 +29,9 @@ export default {
   computed: {
     event() {
       return this.$store.getters["events/loadedEvent"](this.id);
+    },
+    loading() {
+      return this.$store.getters["events/loading"];
     }
   }
 };

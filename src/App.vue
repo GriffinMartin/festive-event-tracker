@@ -31,6 +31,10 @@
           <v-icon left dark>{{ item.icon }}</v-icon>
           {{ item.title }}
         </v-btn>
+        <v-btn v-if="userIsAuthenticated" flat @click="onLogout">
+          <v-icon left dark>exit_to_app</v-icon>
+          Logout
+        </v-btn>
       </v-toolbar-items>
     </v-toolbar>
     <main><router-view></router-view></main>
@@ -64,6 +68,11 @@ export default {
         this.$store.getters["user/user"] !== null &&
         this.$store.getters["user/user"] !== undefined
       );
+    }
+  },
+  methods: {
+    onLogout() {
+      this.$store.dispatch("user/logout");
     }
   }
 };

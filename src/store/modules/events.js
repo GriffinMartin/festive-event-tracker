@@ -1,58 +1,104 @@
+import firebase from "firebase";
+
 // initial state
 const state = {
-  loadedEvents: [
-    {
-      imageUrl:
-        "https://image-ticketfly.imgix.net/00/03/05/53/91-og.png?w=650&h=919",
-      id: "1324twgfd",
-      title: "Black Box 2 Year",
-      date: new Date(),
-      location: "Denver, CO",
-      description: "This is a description"
-    },
-    {
-      imageUrl:
-        "https://image-ticketfly.imgix.net/00/03/05/53/91-og.png?w=650&h=919",
-      id: "234rsdfd",
-      title: "Tipper NYE",
-      date: new Date(),
-      location: "Denver, CO",
-      description: "This is another description"
-    }
-  ],
-  user: {
-    id: "gmartin",
-    myEvents: ["1", "2"]
-  }
+  loadedEvents: [],
+  loading: false,
+  error: null
 };
-// actions
+// actions [place async code here]
 const actions = {
-  createEvent({ commit }, payload) {
+  loadEvents({ commit }) {
+    commit("setLoading", true);
+    firebase
+      .database()
+      .ref("events")
+      .once("value")
+      .then(data => {
+        const events = [];
+        const obj = data.val();
+        for (let key in obj) {
+          const event = obj[key];
+          events.push({
+            id: key,
+            title: event.title,
+            description: event.description,
+            imageUrl: event.imageUrl,
+            date: event.date,
+            creatorId: event.creatorId
+          });
+        }
+        commit("setLoadedEvents", events);
+        commit("setLoading", false);
+      })
+      .catch(error => {
+        console.log(error);
+        commit("setLoading", false);
+      });
+  },
+  createEvent({ commit, rootState }, payload) {
     const event = {
       title: payload.title,
       location: payload.location,
-      imageUrl: payload.imageUrl,
       description: payload.description,
-      date: payload.date,
-      id: "kfdlsfjslakl12"
+      date: payload.date.toISOString(),
+      creatorId: rootState.user.user.id
     };
-    // TODO Reach out to firebase and store it
-    commit("createEvent", event);
+    let imageUrl;
+    let key;
+    firebase
+      .database()
+      .ref("events")
+      .push(event)
+      .then(data => {
+        key = data.key;
+        return key;
+      })
+      .then(key => {
+        const filename = payload.image.name;
+        const ext = filename.slice(filename.lastIndexOf("."));
+        return firebase
+          .storage()
+          .ref("events/" + key + ext)
+          .put(payload.image);
+      })
+      .then(fileData => {
+        return fileData.ref.getDownloadURL();
+      })
+      .then(downloadURL => {
+        imageUrl = downloadURL;
+        return firebase
+          .database()
+          .ref("events")
+          .child(key)
+          .update({ imageUrl: imageUrl });
+      })
+      .then(() => {
+        commit("createEvent", {
+          ...event,
+          imageUrl: imageUrl,
+          id: key
+        });
+      })
+      .catch(error => {
+        console.log(error);
+      });
   }
 };
 // mutations
 const mutations = {
   createEvent(state, payload) {
     state.loadedEvents.push(payload);
+  },
+  setLoadedEvents(state, payload) {
+    state.loadedEvents = payload;
+  },
+  setLoading(state, payload) {
+    state.loading = payload;
   }
 };
 // getters
 const getters = {
-  loadedEvents(state) {
-    return state.loadedEvents.sort((eventA, eventB) => {
-      return eventA.date > eventB.date;
-    });
-  },
   featuredEvents(state, getters) {
     return getters.loadedEvents.slice(0, 5);
   },
@@ -62,6 +108,14 @@ const getters = {
         return event.id === eventId;
       });
     };
+  },
+  loadedEvents(state) {
+    return state.loadedEvents.sort((eventA, eventB) => {
+      return eventA.date > eventB.date;
+    });
+  },
+  loading(state) {
+    return state.loading;
   }
 };
 

@@ -1,5 +1,10 @@
 <template>
   <v-container>
+    <v-layout row v-if="error">
+      <v-flex xs12 sm6 offset-sm3>
+        <app-alert @dismissed="onDismissed" :text="error.message"></app-alert>
+      </v-flex>
+    </v-layout>
     <v-layout row>
       <v-flex xs12 sm6 offset-sm3>
         <v-card>
@@ -27,7 +32,11 @@
                   </v-flex>
                 </v-layout>
                 <v-layout row>
-                  <v-flex xs12> <v-btn type="submit">Sign In</v-btn></v-flex>
+                  <v-flex xs12>
+                    <v-btn type="submit" :loading="loading"
+                      >Sign In</v-btn
+                    ></v-flex
+                  >
                 </v-layout>
               </form>
             </v-container>
@@ -46,9 +55,18 @@ export default {
       password: ""
     };
   },
+  beforeMount() {
+    this.$store.dispatch("user/clearError");
+  },
   computed: {
     user() {
       return this.$store.getters["user/user"];
+    },
+    loading() {
+      return this.$store.getters["user/loading"];
+    },
+    error() {
+      return this.$store.getters["user/error"];
     }
   },
   watch: {
@@ -64,6 +82,9 @@ export default {
         email: this.email,
         password: this.password
       });
+    },
+    onDismissed() {
+      this.$store.dispatch("user/clearError");
     }
   }
 };

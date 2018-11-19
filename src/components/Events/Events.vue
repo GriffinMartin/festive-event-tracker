@@ -1,6 +1,24 @@
 <template>
   <v-container>
-    <v-layout row wrap v-for="event in events" :key="event.id" class="mb-2">
+    <v-layout v-if="loading">
+      <v-flex xs12 class="text-xs-center">
+        <v-progress-circular
+          indeterminate
+          class="primary--text"
+          :width="7"
+          :size="70"
+        >
+        </v-progress-circular>
+      </v-flex>
+    </v-layout>
+    <v-layout
+      row
+      wrap
+      v-for="event in events"
+      v-if="!loading"
+      :key="event.id"
+      class="mb-2"
+    >
       <v-flex xs12 sm10 md8 offset-sm1 offset-md2>
         <v-card>
           <v-container fluid>
@@ -39,6 +57,9 @@ export default {
   computed: {
     events() {
       return this.$store.getters["events/loadedEvents"];
+    },
+    loading() {
+      return this.$store.getters["events/loading"];
     }
   },
   data: () => ({})
