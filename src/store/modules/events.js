@@ -25,6 +25,7 @@ const actions = {
             description: event.description,
             imageUrl: event.imageUrl,
             date: event.date,
+            location: event.location,
             creatorId: event.creatorId
           });
         }
@@ -83,12 +84,52 @@ const actions = {
       .catch(error => {
         console.log(error);
       });
+  },
+  updateEvent({ commit }, payload) {
+    commit("setLoading", true);
+    const updateObj = {};
+    if (payload.title) {
+      updateObj.title = payload.title;
+    }
+    if (payload.description) {
+      updateObj.description = payload.description;
+    }
+    if (payload.date) {
+      updateObj.date = payload.date;
+    }
+    firebase
+      .database()
+      .ref("events")
+      .child(payload.id)
+      .update(updateObj)
+      .then(() => {
+        commit("setLoading", false);
+        commit("updateEvent", payload);
+      })
+      .catch(error => {
+        console.log(error);
+        commit("setLoading", false);
+      });
   }
 };
 // mutations
 const mutations = {
   createEvent(state, payload) {
     state.loadedEvents.push(payload);
+  },
+  updateEvent(state, payload) {
+    const event = state.loadedEvents.find(event => {
+      return event.id === payload.id;
+    });
+    if (payload.title) {
+      event.title = payload.title;
+    }
+    if (payload.description) {
+      event.description = payload.description;
+    }
+    if (payload.date) {
+      event.date = payload.date;
+    }
   },
   setLoadedEvents(state, payload) {
     state.loadedEvents = payload;

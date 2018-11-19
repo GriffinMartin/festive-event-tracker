@@ -1,10 +1,26 @@
 <template>
-  <v-container v-if="!loading">
-    <v-layout row wrap>
+  <v-container>
+    <v-layout row wrap v-if="loading">
+      <v-flex xs12 class="text-xs-center">
+        <v-progress-circular
+          indeterminate
+          class="primary--text"
+          :width="7"
+          :size="70"
+        >
+        </v-progress-circular>
+      </v-flex>
+    </v-layout>
+    <v-layout row wrap v-if="!loading">
       <v-flex xs12>
         <v-card>
           <v-card-title>
             <h6 class="primary--text">{{ event.title }}</h6>
+            <template v-if="userIsCreator">
+              <v-spacer></v-spacer>
+              <app-edit-event-details-dialog :event="event">
+              </app-edit-event-details-dialog>
+            </template>
           </v-card-title>
           <v-img :src="event.imageUrl" height="400px"></v-img>
           <v-card-text>
@@ -32,6 +48,18 @@ export default {
     },
     loading() {
       return this.$store.getters["events/loading"];
+    },
+    userIsAuthenticated() {
+      return (
+        this.$store.getters["user/user"] !== null &&
+        this.$store.getters["user/user"] !== undefined
+      );
+    },
+    userIsCreator() {
+      if (!this.userIsAuthenticated) {
+        return false;
+      }
+      return this.$store.getters["user/user"].id === this.event.creatorId;
     }
   }
 };

@@ -61,8 +61,7 @@ export default {
     loading() {
       return this.$store.getters["events/loading"];
     }
-  },
-  data: () => ({})
+  }
 };
 </script>
 
