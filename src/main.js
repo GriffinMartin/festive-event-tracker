@@ -8,6 +8,8 @@ import "./plugins/vuetify";
 import "./firebase";
 
 import AlertCmp from "@/components/Shared/Alert";
+import EditEventDateDialog from "@/components/Events/Edit/EditEventDateDialog";
+import EditEventTimeDialog from "@/components/Events/Edit/EditEventTimeDialog";
 import EditEventDetailsDialog from "@/components/Events/Edit/EditEventDetailsDialog";
 import App from "./App";
 import DateFilter from "./filters/date";
@@ -16,6 +18,8 @@ Vue.config.productionTip = false;
 Vue.use(VueFire);
 Vue.filter("date", DateFilter);
 Vue.component("app-alert", AlertCmp);
+Vue.component("app-edit-event-date-dialog", EditEventDateDialog);
+Vue.component("app-edit-event-time-dialog", EditEventTimeDialog);
 Vue.component("app-edit-event-details-dialog", EditEventDetailsDialog);
 
 new Vue({

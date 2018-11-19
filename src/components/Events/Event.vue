@@ -26,6 +26,12 @@
           <v-card-text>
             <div class="info--text">
               {{ event.date | date }} - {{ event.location }}
+              <template v-if="userIsCreator">
+                <app-edit-event-date-dialog :event="event">
+                </app-edit-event-date-dialog>
+                <app-edit-event-time-dialog :event="event">
+                </app-edit-event-time-dialog>
+              </template>
             </div>
             <div>{{ event.description }}</div>
           </v-card-text>
